@@ -5,10 +5,12 @@ const weightPriceElement = document.querySelector("#weight-price");
 const deliveryPriceElement = document.querySelector("#delivery-price");
 
 function formatCurrency(value) {
-  return value.toLocaleString("pt-BR", {
-    style: "currency",
-    currency: "BRL"
-  });
+  return value
+    .toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    })
+    .replace(/\u00a0/g, " ");
 }
 
 function renderResult(result) {
