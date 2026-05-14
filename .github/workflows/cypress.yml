@@ -10,7 +10,7 @@ jobs:
     name: Cypress headless
     runs-on: ubuntu-latest
     container:
-      image: cypress/base:20.18.1
+      image: cypress/included:13.17.0
 
     steps:
       - name: Checkout repository
