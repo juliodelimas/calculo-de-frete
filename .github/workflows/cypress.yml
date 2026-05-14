@@ -1,0 +1,55 @@
+name: Cypress
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  e2e:
+    name: Cypress headless
+    runs-on: ubuntu-latest
+    container:
+      image: cypress/base:20.18.1
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Start application
+        run: |
+          npm start > app.log 2>&1 &
+          echo $! > app.pid
+
+      - name: Wait for application
+        run: |
+          node <<'EOF'
+          const url = "http://localhost:3000";
+          const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+          (async () => {
+            for (let attempt = 1; attempt <= 30; attempt += 1) {
+              try {
+                const response = await fetch(url);
+
+                if (response.ok) {
+                  console.log("Application is available.");
+                  process.exit(0);
+                }
+              } catch (error) {
+                console.log(`Waiting for application... attempt ${attempt}/30`);
+              }
+
+              await wait(2000);
+            }
+
+            console.error("Application did not become available in time.");
+            process.exit(1);
+          })();
+          EOF
+
+      - name: Run Cypress tests
+        run: npm run test:e2e -- --headless
