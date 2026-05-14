@@ -5,7 +5,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "test": "node --test"
+    "test": "node --test",
+    "test:e2e": "cypress run",
+    "cy:open": "cypress open"
   },
   "keywords": [
     "frete",
@@ -13,5 +15,8 @@
     "node"
   ],
   "author": "",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "cypress": "^13.17.0"
+  }
 }
